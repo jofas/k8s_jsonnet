@@ -74,3 +74,13 @@ local SecretRef(name) = {
     name: name,
   },
 };
+
+{
+  Service(name, labels, ports, clusterIP=null):
+    Service(name, labels, ports, clusterIP),
+  Deployment(name, labels, containers): Deployment(name, labels, containers),
+  StatefulSet(name, labels, serviceName, container, volumeClaimTemplates):
+    StatefulSet(name, labels, serviceName, container, volumeClaimTemplates),
+  ConfigMapRef(name): ConfigMapRef(name),
+  SecretRef(name): SecretRef(name),
+}
