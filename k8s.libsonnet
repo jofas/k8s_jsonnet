@@ -83,4 +83,19 @@ local SecretRef(name) = {
     StatefulSet(name, labels, serviceName, containers, volumeClaimTemplates),
   ConfigMapRef(name): ConfigMapRef(name),
   SecretRef(name): SecretRef(name),
+  VolumeClaimTemplate(name): {
+    metadata: {
+      name: name,
+    },
+    spec: {
+      accessModes: [
+        'ReadWriteOnce',
+      ],
+      resources: {
+        requests: {
+          storage: '10Gi',
+        },
+      },
+      storageClassName: 'standard',
+    },
 }
