@@ -98,4 +98,5 @@ local SecretRef(name) = {
       },
       storageClassName: 'standard',
     },
+  },
 }
