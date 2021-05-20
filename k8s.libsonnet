@@ -32,9 +32,9 @@ local Deployment(name, labels, containers, volumes=[]) = {
       },
       spec: {
         containers: containers,
+        volumes: volumes,
       },
     },
-    volumes: volumes,
   },
 };
 
