@@ -26,8 +26,8 @@ spec:
       labels: []
     spec:
       containers: []
-  volumes:
-  - name: vol1
-    persistenVolumeClaim:
-      claimName: pvc1
-      readOnly: false
+      volumes:
+      - name: vol1
+        persistentVolumeClaim:
+          claimName: pvc1
+          readOnly: false
