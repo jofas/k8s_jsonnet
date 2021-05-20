@@ -13,7 +13,7 @@ local Service(name, labels, ports, clusterIP=null) = {
   },
 };
 
-local Deployment(name, labels, containers) = {
+local Deployment(name, labels, containers, volumes=[]) = {
   apiVersion: 'apps/v1',
   kind: 'Deployment',
   metadata: {
@@ -34,6 +34,7 @@ local Deployment(name, labels, containers) = {
         containers: containers,
       },
     },
+    volumes: volumes,
   },
 };
 
@@ -78,7 +79,7 @@ local SecretRef(name) = {
 {
   Service(name, labels, ports, clusterIP=null):
     Service(name, labels, ports, clusterIP),
-  Deployment(name, labels, containers): Deployment(name, labels, containers),
+  Deployment(name, labels, containers, volumes=[]): Deployment(name, labels, containers, volumes),
   StatefulSet(name, labels, serviceName, containers, volumeClaimTemplates):
     StatefulSet(name, labels, serviceName, containers, volumeClaimTemplates),
   ConfigMapRef(name): ConfigMapRef(name),
@@ -97,6 +98,30 @@ local SecretRef(name) = {
         },
       },
       storageClassName: 'standard',
+    },
+  },
+  PersistentVolumeClaim(name, namespace='default', accessModes=[], storage='1Gi', storageClassName=null): {
+    apiVersion: 'v1',
+    kind: 'PersistentVolumeClaim',
+    metadata: {
+      name: name,
+      namespace: namespace,
+    },
+    spec: {
+      accessModes: accessModes,
+      resources: {
+        requests: {
+          storage: storage,
+        },
+      },
+      storageClassName: storageClassName,
+    },
+  },
+  Volume(name, claimName, readOnly=false): {
+    name: name,
+    persistenVolumeClaim: {
+      claimName: claimName,
+      readOnly: readOnly,
     },
   },
 }
