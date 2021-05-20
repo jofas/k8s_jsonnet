@@ -119,7 +119,7 @@ local SecretRef(name) = {
   },
   Volume(name, claimName, readOnly=false): {
     name: name,
-    persistenVolumeClaim: {
+    persistentVolumeClaim: {
       claimName: claimName,
       readOnly: readOnly,
     },
