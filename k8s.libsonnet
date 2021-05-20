@@ -114,7 +114,7 @@ local SecretRef(name) = {
           storage: storage,
         },
       },
-      storageClassName: storageClassName,
+      [if storageClassName != null then 'storageClassName']: storageClassName,
     },
   },
   Volume(name, claimName, readOnly=false): {
