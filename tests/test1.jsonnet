@@ -7,12 +7,14 @@ local kube = import '../k8s.libsonnet';
   kube.Deployment(
     name='',
     labels=[],
-    containers=[],
-    volumes=[
-      kube.Volume(
-        name='vol1',
-        claimName='pvc1',
-      ),
-    ],
+    podTemplate=kube.PodTemplate(
+      containers=[],
+      volumes=[
+        kube.Volume(
+          name='vol1',
+          claimName='pvc1',
+        ),
+      ],
+    ),
   ),
 ]

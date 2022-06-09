@@ -13,31 +13,6 @@ local Service(name, labels, ports, clusterIP=null) = {
   },
 };
 
-local Deployment(name, labels, containers, volumes=[]) = {
-  apiVersion: 'apps/v1',
-  kind: 'Deployment',
-  metadata: {
-    name: name,
-    namespace: 'default',
-    labels: labels,
-  },
-  spec: {
-    replicas: 1,
-    selector: {
-      matchLabels: labels,
-    },
-    template: {
-      metadata: {
-        labels: labels,
-      },
-      spec: {
-        containers: containers,
-        volumes: volumes,
-      },
-    },
-  },
-};
-
 local StatefulSet(name, labels, serviceName, containers, volumeClaimTemplates) = {
   apiVersion: 'apps/v1',
   kind: 'StatefulSet',
@@ -79,7 +54,33 @@ local SecretRef(name) = {
 {
   Service(name, labels, ports, clusterIP=null):
     Service(name, labels, ports, clusterIP),
-  Deployment(name, labels, containers, volumes=[]): Deployment(name, labels, containers, volumes),
+  Deployment(name, labels, podTemplate): {
+    apiVersion: 'apps/v1',
+    kind: 'Deployment',
+    metadata: {
+      name: name,
+      namespace: 'default',
+      labels: labels,
+    },
+    spec: {
+      replicas: 1,
+      selector: {
+        matchLabels: labels,
+      },
+      template: podTemplate {
+        metadata: {
+          labels: labels,
+        },
+      },
+    },
+  },
+  PodTemplate(containers, volumes=[], nodeSelector=null): {
+    spec: {
+      containers: containers,
+      volumes: volumes,
+      [if nodeSelector != null then 'nodeSelector']: nodeSelector,
+    },
+  },
   StatefulSet(name, labels, serviceName, containers, volumeClaimTemplates):
     StatefulSet(name, labels, serviceName, containers, volumeClaimTemplates),
   ConfigMapRef(name): ConfigMapRef(name),
